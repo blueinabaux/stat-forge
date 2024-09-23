@@ -1,1 +1,1 @@
-# stat-forge
+# StatForge - A CP statistics dashboard
