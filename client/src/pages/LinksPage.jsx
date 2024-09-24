@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/slice/userSlice";
+import { setUser, setContest } from "../redux/slice/userSlice";
 import { useNavigate } from "react-router-dom";
 
 
@@ -39,6 +39,8 @@ const LinksPage = () => {
     }
 
     const [userData, setUserData] = useState(null);
+    const [userContest, setUserContest] = useState(null);
+
 
     
     const getCodeForcesUser = async () => {
@@ -64,10 +66,31 @@ const LinksPage = () => {
         }
     };
 
+    const getUserContests = async () => {
+        try{
+            const response = await axios.get(
+                `https://codeforces.com/api/user.rating?handle=${ulinks.codeforces}`
+            );
+
+            if(response.data && response.data.result){
+                setUserContest(response.data.result);
+                console.log("CONTEST RESPONSE DATA: ", response.data.result);
+                dispatch(setContest(response.data.result[0])); // Dispatch user data
+
+
+            }
+        }
+        catch(error){
+            console.log("ERROR in Contests: ",error.message)
+        }
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         await getCodeForcesUser();
+        await getUserContests();
+
 
          if (userData) {
             navigate("/"); 
