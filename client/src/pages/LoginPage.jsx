@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -17,6 +18,42 @@ const LoginPage = () => {
                 [name]:value
             }
         })
+
+    }
+
+    const logUser = async (e) => {
+        e.preventDefault();
+
+        const { email, password} = logData;
+
+
+        if(email === ""){
+            alert("Please enter your email !");
+
+        }
+        else if(!email.includes("@")){
+            alert("Please enter valid email !");
+        }
+
+        else if(password === ""){
+            alert("Please enter your password !");
+
+        }
+        else{
+            alert("Logged in Successfully !");
+        }
+
+        try{
+            const response = await axios.post("http://localhost:8000/login",logData);
+
+            console.log("LOGIN INFO: ",response.data);
+
+            alert("LOGIN SUCCESSFUL");
+        }
+
+        catch(error){
+            console.log("ERROR LOGIN: ", error.message);
+        }
 
     }
 
@@ -52,7 +89,10 @@ const LoginPage = () => {
                     </div>
 
 
-                    <button  className=" w-[80%] px-[2vw] py-[1vh] bg-white border-[1px] border-solid border-white hover:bg-transparent  hover:text-white font-bold" >Login</button>
+                    <button
+                    onClick={logUser}
+                    
+                    className=" w-[80%] px-[2vw] py-[1vh] bg-white border-[1px] border-solid border-white hover:bg-transparent  hover:text-white font-bold" >Login</button>
                 </form>
             </div>
         </>
